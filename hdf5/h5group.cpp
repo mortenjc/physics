@@ -1,17 +1,3 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
- * All rights reserved.                                                      *
- *                                                                           *
- * This file is part of HDF5.  The full HDF5 copyright notice, including     *
- * terms governing use, modification, and redistribution, is contained in    *
- * the files COPYING and Copyright.html.  COPYING can be found at the root   *
- * of the source code distribution tree; Copyright.html can be found at the  *
- * root level of an installed copy of the electronic HDF5 document set and   *
- * is linked from the top-level documents page.  It can also be found at     *
- * http://hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have          *
- * access to either file, you may request a copy from help@hdfgroup.org.     *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*
  * This example creates a group in the file and dataset in the group.
  * Hard link to the group object is created and the dataset is accessed
@@ -39,35 +25,20 @@
 const H5std_string FILE_NAME( "Group.h5" );
 const int      RANK = 2;
 // Operator function
-extern "C" herr_t file_info(hid_t loc_id, const char *name, const H5L_info_t *linfo,
-    void *opdata);
+extern "C" herr_t file_info(hid_t loc_id, const char *name, const H5L_info_t *linfo, void *opdata);
 int main(void)
 {
     hsize_t  dims[2];
     hsize_t  cdims[2];
     // Try block to detect exceptions raised by any of the calls inside it
-    try
-    {
-    /*
-     * Turn off the auto-printing when failure occurs so that we can
-     * handle the errors appropriately
-     */
+    try {
+
     Exception::dontPrint();
-    /*
-     * Create the named file, truncating the existing one if any,
-     * using default create and access property lists.
-     */
+
     H5File *file = new H5File( FILE_NAME, H5F_ACC_TRUNC );
-    /*
-     * Create a group in the file
-     */
+
     Group* group = new Group( file->createGroup( "/Data" ));
-    /*
-     * Create dataset "Compressed Data" in the group using absolute
-     * name. Dataset creation property list is modified to use
-     * GZIP compression with the compression effort set to 6.
-     * Note that compression can be used only when dataset is chunked.
-     */
+
     dims[0] = 1000;
     dims[1] = 20;
     cdims[0] = 20;
@@ -76,15 +47,11 @@ int main(void)
     DSetCreatPropList ds_creatplist;  // create dataset creation prop list
     ds_creatplist.setChunk( 2, cdims );  // then modify it for compression
     ds_creatplist.setDeflate( 6 );
-    /*
-     * Create the first dataset.
-     */
+
     DataSet* dataset = new DataSet(file->createDataSet(
         "/Data/Compressed_Data", PredType::NATIVE_INT,
         *dataspace, ds_creatplist ));
-    /*
-     * Close the first dataset.
-     */
+
     delete dataset;
     delete dataspace;
     /*
@@ -196,8 +163,7 @@ int main(void)
 /*
  * Operator function.
  */
-herr_t
-file_info(hid_t loc_id, const char *name, const H5L_info_t *linfo, void *opdata)
+herr_t file_info(hid_t loc_id, const char *name, const H5L_info_t *linfo, void *opdata)
 {
     hid_t group;
     /*
