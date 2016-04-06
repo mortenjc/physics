@@ -35,9 +35,9 @@ int main(void)
 
     Exception::dontPrint();
 
-    H5File *file = new H5File( FILE_NAME, H5F_ACC_TRUNC );
+    H5File file( FILE_NAME, H5F_ACC_TRUNC );
 
-    Group* group = new Group( file->createGroup( "/Data" ));
+    Group* group = new Group( file.createGroup( "/Data" ));
 
     dims[0] = 1000;
     dims[1] = 20;
@@ -48,7 +48,7 @@ int main(void)
     ds_creatplist.setChunk( 2, cdims );  // then modify it for compression
     ds_creatplist.setDeflate( 6 );
 
-    DataSet* dataset = new DataSet(file->createDataSet(
+    DataSet* dataset = new DataSet(file.createDataSet(
         "/Data/Compressed_Data", PredType::NATIVE_INT,
         *dataspace, ds_creatplist ));
 
@@ -60,17 +60,16 @@ int main(void)
     dims[0] = 500;
     dims[1] = 20;
     dataspace = new DataSpace(RANK, dims); // create second dspace
-    dataset = new DataSet(file->createDataSet("/Data/Float_Data",
+    dataset = new DataSet(file.createDataSet("/Data/Float_Data",
             PredType::NATIVE_FLOAT, *dataspace));
     delete dataset;
     delete dataspace;
     delete group;
-    delete file;
     /*
      * Now reopen the file and group in the file.
      */
-    file = new H5File(FILE_NAME, H5F_ACC_RDWR);
-    group = new Group(file->openGroup("Data"));
+    H5File file2(FILE_NAME, H5F_ACC_RDWR);
+    group = new Group(file2.openGroup("Data"));
     /*
      * Access "Compressed_Data" dataset in the group.
      */
@@ -86,15 +85,15 @@ int main(void)
      */
     delete dataset;
     /*
-     * Create hard link to the Data group.
+     * Create hard link to 2.the Data group.
      */
-    file->link( H5L_TYPE_HARD, "Data", "Data_new" );
+    file2.link( H5L_TYPE_HARD, "Data", "Data_new" );
     /*
      * We can access "Compressed_Data" dataset using created
      * hard link "Data_new".
      */
     try {  // to determine if the dataset exists in the file
-        dataset = new DataSet(file->openDataSet( "/Data_new/Compressed_Data" ));
+        dataset = new DataSet(file2.openDataSet( "/Data_new/Compressed_Data" ));
     }
     catch( FileIException not_found_error )
     {
@@ -110,7 +109,7 @@ int main(void)
      * root directory.
      */
     cout << endl << "Iterating over elements in the file" << endl;
-    herr_t idx = H5Literate(file->getId(), H5_INDEX_NAME, H5_ITER_INC, NULL, file_info, NULL);
+    herr_t idx = H5Literate(file2.getId(), H5_INDEX_NAME, H5_ITER_INC, NULL, file_info, NULL);
     cout << endl;
     /*
      * Unlink  name "Data" and use iterator to see the names
@@ -118,7 +117,7 @@ int main(void)
      */
     cout << "Unlinking..." << endl;
     try {  // attempt to unlink the dataset
-        file->unlink( "Data" );
+        file2.unlink( "Data" );
     }
     catch( FileIException unlink_error )
     {
@@ -126,13 +125,12 @@ int main(void)
     }
     cout << "\"Data\" is unlinked" << endl;
     cout << endl << "Iterating over elements in the file again" << endl;
-    idx = H5Literate(file->getId(), H5_INDEX_NAME, H5_ITER_INC, NULL, file_info, NULL);
+    idx = H5Literate(file2.getId(), H5_INDEX_NAME, H5_ITER_INC, NULL, file_info, NULL);
     cout << endl;
     /*
      * Close the group and file.
      */
     delete group;
-    delete file;
     }  // end of try block
     // catch failure caused by the H5File operations
     catch( FileIException error )
