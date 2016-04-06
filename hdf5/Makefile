@@ -1,8 +1,6 @@
 
-INCLUDE= -I/usr/local/hdf5/include 
+CFLAGS= -I/usr/local/hdf5/include 
 LDFLAGS= -L/usr/local/hdf5/lib -lhdf5 -lhdf5_cpp  -lhdf5_hl_cpp 
-
-CFLAGS=
 
 ifdef COV
    CFLAGS+= --coverage
@@ -22,13 +20,13 @@ all: $(PROGS)
 	echo done
 
 h5group: src/h5group.cpp
-	$(Q)g++ $< $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
+	$(Q)g++ $< $(CFLAGS) $(LDFLAGS) -o $@
 
 hdf5test: src/hdf5test.cpp
-	$(Q)g++ $< $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
+	$(Q)g++ $< $(CFLAGS) $(LDFLAGS) -o $@
 
 h5crtgrpar: src/h5crtgrpar.cpp
-	$(Q)g++ $< $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
+	$(Q)g++ $< $(CFLAGS) $(LDFLAGS) -o $@
 
 
 run: $(PROGS)
