@@ -14,7 +14,7 @@ Q=
 endif
 
 
-PROGS = hdf5test h5group
+PROGS = hdf5test h5group h5crtgrpar
 
 TMPFILES=SDS.h5 Group.h5
 
@@ -22,6 +22,7 @@ TMPFILES=SDS.h5 Group.h5
 all:
 	$(Q)g++ hdf5test.cpp $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o hdf5test 
 	$(Q)g++ h5group.cpp $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o h5group
+	$(Q)g++ h5crtgrpar.cpp $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o h5crtgrpar
 
 run: $(PROGS)
 	$(Q)./hdf5test
