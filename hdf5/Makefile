@@ -14,15 +14,22 @@ Q=
 endif
 
 
-PROGS = hdf5test h5group h5crtgrpar
+PROGS= hdf5test h5group h5crtgrpar
 
 TMPFILES=SDS.h5 Group.h5
 
+all: $(PROGS)
+	echo done
 
-all:
-	$(Q)g++ hdf5test.cpp $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o hdf5test 
-	$(Q)g++ h5group.cpp $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o h5group
-	$(Q)g++ h5crtgrpar.cpp $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o h5crtgrpar
+h5group: src/h5group.cpp
+	$(Q)g++ $< $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
+
+hdf5test: src/hdf5test.cpp
+	$(Q)g++ $< $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
+
+h5crtgrpar: src/h5crtgrpar.cpp
+	$(Q)g++ $< $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
+
 
 run: $(PROGS)
 	$(Q)./hdf5test
