@@ -14,9 +14,9 @@ def csv1():
 def csv2():
   for i in range(1,360):
     x = i / 6.28
-    y1 = log(x)
-    y2 = sqrt(x)
-    y3 = y1 * y2 
+    y2 = log(x)
+    y3 = sqrt(x)
+    y1 = log(x) * sqrt(x) 
     print("%7.3f, %7.3f, %7.3f, %7.3f" % (x, y1, y2, y3))
 
 csv2()

@@ -1,36 +1,26 @@
 #!/usr/bin/python
 
-import sys
-from pylab import *
-import numpy as np
+import sys, pylab as pl, numpy as np
 
-y = []
-def main():
-   cols = sys.argv[1]
-   files = sys.argv[2:]
+cols = sys.argv[1]
+files = sys.argv[2:]
+n = len(files)
 
-   c = cols.split() 
-   n = len(files)
+nc, nr = [1, n]
+if (n > 2):
+   nc = int(pl.ceil(pl.sqrt(n)))
+   nr = int(pl.ceil(1.0 * n / nc))
 
-   if (n <= 2):
-      cols = 1
-      rows = n
-   else:
-      cols = int(ceil(sqrt(n)))
-      rows = int(ceil(1.0*n/cols))
+pl.rcParams.update({'font.size': 8})
 
-   rcParams.update({'font.size': 8})
+for idx, file in enumerate(files): 
+  pl.subplot(nr,nc,idx+1)
+  data = np.loadtxt(file, delimiter=',')
+  x = data[:,0]
+  for yi in cols.split():
+    y = data[:,yi]
+    pl.plot(x,y, lw = 0.5)
 
-   pi = 1
-   for f in files: 
-     subplot(rows,cols,pi)
-     data = np.loadtxt(f, delimiter=',', skiprows=0)
-     x = data[:,0]
-     for yi in c:
-       y = data[:,yi]
-       plot(x,y, lw = 0.5)
-     pi = pi + 1
-   show()
+pl.legend(cols.split())
+pl.show()
 
-if __name__ == "__main__":
-    main()
