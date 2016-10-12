@@ -2,6 +2,7 @@
 
 import sys, pylab as pl, numpy as np, time
 
+pl.xkcd()
 fig = pl.figure()
 
 cols = sys.argv[1]

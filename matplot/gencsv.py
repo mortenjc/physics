@@ -1,6 +1,17 @@
 #!/usr/bin/python
 
 from math import *
+import scipy.special as spl 
+
+def bessel():
+  for i in range(1,360):
+    x = i / 6.28
+    y1 = spl.jv(1,x)
+    y2 = spl.yv(1,x)
+    y3 = spl.jv(3,x)
+    
+    print("%7.3f, %7.3f, %7.3f, %7.3f" % (x, y1, y2, y3))
+
 
 
 def csv1():
@@ -19,4 +30,6 @@ def csv2():
     y1 = log(x) * sqrt(x) 
     print("%7.3f, %7.3f, %7.3f, %7.3f" % (x, y1, y2, y3))
 
-csv2()
+
+#csv2()
+bessel()
